@@ -23,7 +23,7 @@ public class JWT {
         return token;
     }
 
-    public static void verifyToken(String token) {
+    public static long verifyToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(base64SecretBytes)
                 .parseClaimsJws(token).getBody();
@@ -31,6 +31,8 @@ public class JWT {
         System.out.println("User: " + claims.get("user"));
         System.out.println("lockID: " + claims.get("lockID"));
         System.out.println("Expiration: " + claims.getExpiration());
+        
+        return Long.parseLong(claims.get("lockID").toString());
     }
 
     /*public static void main(String[] args) {

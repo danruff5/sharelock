@@ -51,7 +51,10 @@ public class LockController {
     
     @PostMapping("locks/{lockId}")
     public Lock actionLock(@RequestBody LockActionRequest request, @PathVariable("lockId") Long lockId) throws Exception {
-        JWT.verifyToken(request.getToken());
+        long tokenLock = JWT.verifyToken(request.getToken());
+        if (tokenLock != lockId) {
+            throw new Exception("Invalid token");
+        }
         
         Optional<Lock> lock = lockRepository.findById(lockId);
         if (!lock.isPresent()) {
