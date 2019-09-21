@@ -1,12 +1,15 @@
 package ca.td.greasy.turkey.sharelock.api.controller;
 
+import ca.td.greasy.turkey.sharelock.api.JWT;
+import ca.td.greasy.turkey.sharelock.api.model.Key;
 import ca.td.greasy.turkey.sharelock.api.model.Lock;
 import ca.td.greasy.turkey.sharelock.api.model.LockActionRequest;
 import ca.td.greasy.turkey.sharelock.api.model.Status;
 import ca.td.greasy.turkey.sharelock.api.model.User;
+import ca.td.greasy.turkey.sharelock.api.repository.KeyRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.LockRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.UserRepository;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class LockController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private KeyRepository keyRepository;
     
     @PostMapping("users/{userId}/locks")
     public Lock addLock(@RequestBody Lock lock, @PathVariable("userId") Long userId) throws Exception {
@@ -45,6 +51,8 @@ public class LockController {
     
     @PostMapping("locks/{lockId}")
     public Lock actionLock(@RequestBody LockActionRequest request, @PathVariable("lockId") Long lockId) throws Exception {
+        JWT.verifyToken(request.getToken());
+        
         Optional<Lock> lock = lockRepository.findById(lockId);
         if (!lock.isPresent()) {
             throw new Exception("User does not exist.");
@@ -55,10 +63,20 @@ public class LockController {
             throw new Exception("Lock is disabled, cannot action it");
         } else {
             l.setStatus(request.getStatus());
-            l.setLastAcessed(Calendar.getInstance());
+            l.setLastAcessed(new Date());
             lockRepository.save(l);
         }
         
         return l;
+    }
+    
+    @GetMapping("locks/{lockId}/keys")
+    public List<Key> getKeys(@PathVariable("lockId") Long lockId) throws Exception {
+        Optional<Lock> lock = lockRepository.findById(lockId);
+        if (!lock.isPresent()) {
+            throw new Exception("Lock does not exist.");
+        }
+        
+        return keyRepository.getKeysByLockId(lockId);
     }
 }

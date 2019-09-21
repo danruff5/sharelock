@@ -13,8 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 @Entity
-@JsonIgnoreProperties({"user"})
-public class Lock {
+@JsonIgnoreProperties({"user", "lock"})
+public class Key {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,14 +22,15 @@ public class Lock {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
-    private String name;
-    private String location;
-    private String deviceId;
-    private Status status = Status.LOCKED;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lockId")
+    private Lock lock;
     
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date lastAcessed;
+    private Date expiryTime;
+    private String token;
 
     public Long getId() {
         return id;
@@ -47,45 +48,27 @@ public class Lock {
         this.user = user;
     }
 
-    public String getLocation() {
-        return location;
+    public Lock getLock() {
+        return lock;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLock(Lock lock) {
+        this.lock = lock;
     }
 
-    public String getDeviceId() {
-        return deviceId;
+    public Date getExpiryTime() {
+        return expiryTime;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
     }
 
-    public Status getStatus() {
-        return status;
+    public String getToken() {
+        return token;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setToken(String token) {
+        this.token = token;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getLastAcessed() {
-        return lastAcessed;
-    }
-
-    public void setLastAcessed(Date lastAcessed) {
-        this.lastAcessed = lastAcessed;
-    }
-    
-    
 }
