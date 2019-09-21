@@ -1,5 +1,8 @@
 POST /keys => Create a key
 	{
+		name: {
+			type: string
+		}, 
 		userId: {
 			type: number
 		},
@@ -15,6 +18,9 @@ POST /keys => Create a key
 		id: {
 			type: number
 		}, 
+		name: {
+			type: string
+		},
 		expiryTime: {
 			type: number
 		},
