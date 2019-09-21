@@ -1,16 +1,19 @@
 package ca.td.greasy.turkey.sharelock.api.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
-import javax.persistence.Temporal;
-
 public class CreateKeyRequest {
+    private String name;
     private Long userId;
     private Long lockId;
-    /*@JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)*/
     private Long expiryTime;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     public Long getUserId() {
         return userId;
     }

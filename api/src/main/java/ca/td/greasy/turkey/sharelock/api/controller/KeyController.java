@@ -33,6 +33,7 @@ public class KeyController {
     @PostMapping("keys")
     public Key createKey(@RequestBody CreateKeyRequest request) throws Exception {
         Key key = new Key();
+        key.setName(request.getName());
         
         Optional<User> user = userRepository.findById(request.getUserId());
         if (!user.isPresent()) {

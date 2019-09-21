@@ -19,6 +19,8 @@ public class Key {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    private String name;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
@@ -70,5 +72,13 @@ public class Key {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
