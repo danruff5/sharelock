@@ -16,6 +16,7 @@ public class User {
     private String lastName;
     
     private String deviceId;
+    private String phoneNumber;
     
     /*private List<Lock> access;
     private List<Lock> owner;*/
@@ -50,5 +51,13 @@ public class User {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

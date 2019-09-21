@@ -23,7 +23,12 @@ public class UserController {
     }
     
     @GetMapping("/users/{userId}")
-    public Optional<User> getUser(@PathVariable("userId") Long id) {
+    public Optional<User> getUserById(@PathVariable("userId") Long id) {
         return userRepository.findById(id);
+    }
+    
+    @GetMapping("/users/search/{phoneNumber}")
+    public Optional<User> getUserByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
+        return userRepository.findUserByPhoneNumber(phoneNumber);
     }
 }
