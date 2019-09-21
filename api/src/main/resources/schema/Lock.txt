@@ -1,0 +1,108 @@
+POST /users/{userId}/locks => Create a new Lock
+	{
+		name: {
+			type: string
+		},
+		location: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		}
+	}
+	
+	{
+		id: {
+			type: number
+		},
+		name: {
+			type: string
+		},
+		location: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		},
+		status: {
+			type: string,
+			enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+		},
+		lastAcessed: {
+			type: number => Note: Is null since it was just created.
+		}
+	}
+GET /users/{userId}/locks => Get Users owned locks
+	
+	{
+		type: array,
+		items: {
+			id: {
+				type: string
+			},
+			name: {
+				type: string
+			},
+			location: {
+				type: string
+			},
+			deviceId: {
+				type: string
+			},
+			status: {
+				type: string,
+				enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+			},
+			lastAcessed: {
+				type: number
+			}
+		}
+	}
+POST /locks/{lockId} => Action lock (lock, unlock, disable)
+	{
+		status: {
+			type: string,
+			enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+		},
+		token: {
+			type: string
+		}
+	}
+	
+	{
+		id: {
+			type: string
+		},
+		name: {
+			type: string
+		},
+		location: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		},
+		status: {
+			type: string,
+			enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+		},
+		lastAcessed: {
+			type: number => Note: Will have just been updated
+		}
+	}
+GET /locks/{lockId}/keys => Get the keys on the lock
+	
+	{
+		type: array,
+		items: {
+			id: {
+				type: string
+			},
+			expiryTime: {
+				type: long
+			},
+			token: {
+				type: string
+			}
+		}
+	}

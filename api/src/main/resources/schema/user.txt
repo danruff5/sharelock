@@ -1,0 +1,42 @@
+POST /users => Create User
+	{
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		}
+	}
+	
+	{
+		id: {
+			type: string
+		},
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		}
+	}
+GET /users/{userId} => Get a User by ID
+	{
+		id: {
+			type: string
+		},
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		}
+	}

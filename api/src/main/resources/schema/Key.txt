@@ -1,0 +1,40 @@
+POST /keys => Create a key
+	{
+		userId: {
+			type: number
+		},
+		lockId: {
+			type: number
+		},
+		expiryTime: {
+			type: number
+		}
+	}
+	
+	{
+		id: {
+			type: number
+		}, 
+		expiryTime: {
+			type: number
+		},
+		token: {
+			type: string
+		}
+	}
+GET /keys/{userId} => Get Users Keys
+	
+	{
+		type: array,
+		items: {
+			id: {
+				type: number
+			}, 
+			expiryTime: {
+				type: number
+			},
+			token: {
+				type: string
+			}
+		}
+	}
