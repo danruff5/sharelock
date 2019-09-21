@@ -1,2 +1,3 @@
 /api/target/
+/auth/target/
 *.iml
