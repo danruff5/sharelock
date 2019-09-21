@@ -1,0 +1,71 @@
+POST /users => Create User
+	{
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		},
+		phoneNumber: {
+			type: string
+		}
+	}
+	
+	{
+		id: {
+			type: string
+		},
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		},
+		phoneNumber: {
+			type: string
+		}
+	}
+GET /users/{userId} => Get a User by ID
+
+	{
+		id: {
+			type: string
+		},
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		},
+		phoneNumber: {
+			type: string
+		}
+	}
+GET /users/search/{phoneNumber} => Find user by phone number (Note: must be exact string that was entered)
+	
+	{
+		id: {
+			type: string
+		},
+		firstName: {
+			type: string
+		},
+		lastName: {
+			type: string
+		},
+		deviceId: {
+			type: string
+		},
+		phoneNumber: {
+			type: string
+		}
+	}
