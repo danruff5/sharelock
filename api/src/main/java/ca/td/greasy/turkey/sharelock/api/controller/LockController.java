@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,7 +66,7 @@ public class LockController {
     
     @GetMapping("users/{userId}/locks")
     public List<Lock> getLocks(@PathVariable("userId") Long userId) {
-        return lockRepository.findByUserId(userId);
+        return lockRepository.findByOwnerId(userId);
     }
     
     @GetMapping("locks/{lockId}")
@@ -76,9 +77,9 @@ public class LockController {
     
     @PostMapping("locks/{lockId}")
     public Lock actionLock(@RequestBody LockActionRequest request, @PathVariable("lockId") Long lockId) throws Exception {
-        Long tokenKey = 0L, tokenLock = 0L, tokenUser = 0L;
+        AtomicLong tokenKey = new AtomicLong(0L), tokenLock = new AtomicLong(0L), tokenUser = new AtomicLong(0L);
         JWT.verifyToken(request.getToken(), tokenKey, tokenLock, tokenUser);
-        if (!Objects.equals(tokenLock, lockId)) {
+        if (tokenKey.get() == lockId) {
             throw new Exception("Invalid token");
         }
         
@@ -91,7 +92,7 @@ public class LockController {
         if (Status.DISABLED.equals(l.getStatus()) && !Status.LOCKED.equals(request.getStatus())) {
             throw new Exception("Lock is disabled, cannot action it");
         } else {
-            Optional<Key> key = keyRepository.findById(tokenKey);
+            Optional<Key> key = keyRepository.findById(tokenKey.get());
             if (!key.isPresent()) {
                 throw new Exception("Key does not exist");
             }

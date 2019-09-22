@@ -1,6 +1,7 @@
 package ca.td.greasy.turkey.sharelock.api.controller;
 
 import ca.td.greasy.turkey.sharelock.api.JWT;
+import static ca.td.greasy.turkey.sharelock.api.JWT.base64SecretBytes;
 import ca.td.greasy.turkey.sharelock.api.model.CreateKeyRequest;
 import ca.td.greasy.turkey.sharelock.api.model.Key;
 import ca.td.greasy.turkey.sharelock.api.model.Lock;
@@ -9,10 +10,16 @@ import ca.td.greasy.turkey.sharelock.api.model.User;
 import ca.td.greasy.turkey.sharelock.api.repository.KeyRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.LockRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +41,7 @@ public class KeyController {
     
     @Autowired
     private KeyRepository keyRepository;
+
     
     @PostMapping("keys")
     public Key createKey(@RequestBody CreateKeyRequest request) throws Exception {
@@ -54,6 +62,8 @@ public class KeyController {
         key.setLock(lock.get());
         
         key.setExpiryTime(new Date(request.getExpiryTime()));
+        keyRepository.save(key);
+        
         String token = JWT.generateToken(
                 key.getExpiryTime(), 
                 request.getUserId().toString(), 
@@ -62,8 +72,8 @@ public class KeyController {
         );
         key.setToken(token);
         key.setActive(true);
-        
         keyRepository.save(key);
+        
         return key;
     }
     
@@ -73,7 +83,7 @@ public class KeyController {
         if (!user.isPresent()) {
             throw new Exception("User does not exist"); 
         }
-        Long tokenKey = 0L, tokenLock = 0L, tokenUser = 0L;
+        AtomicLong tokenKey = new AtomicLong(0L), tokenLock = new AtomicLong(0L), tokenUser = new AtomicLong(0L);
         List<Key> keys = keyRepository.getKeysByUserId(userId);
         for (int i = 0; i < keys.size(); i++) {
             try {

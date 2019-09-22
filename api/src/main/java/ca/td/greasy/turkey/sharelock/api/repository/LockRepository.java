@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LockRepository extends CrudRepository<Lock, Long> {
-    List<Lock> findByUserId(Long userId);
+    List<Lock> findByOwnerId(Long userId);
 }

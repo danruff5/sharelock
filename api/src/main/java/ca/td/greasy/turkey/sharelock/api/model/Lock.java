@@ -1,10 +1,8 @@
 package ca.td.greasy.turkey.sharelock.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,13 +11,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 @Entity
-//@JsonIgnoreProperties({"user"})
 public class Lock {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User owner;
     private String name;

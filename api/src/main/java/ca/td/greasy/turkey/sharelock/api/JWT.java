@@ -5,18 +5,19 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;   
 import java.util.Base64;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class JWT {
 
-    private static final Key secret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final byte[] secretBytes = secret.getEncoded();
-    private static final String base64SecretBytes = Base64.getEncoder().encodeToString(secretBytes);
+    public static final Key secret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public static final byte[] secretBytes = secret.getEncoded();
+    public static final String base64SecretBytes = Base64.getEncoder().encodeToString(secretBytes);
 
     public static String generateToken(Date expiry, String user, String lockID, String keyId) {
         String token = Jwts.builder()
                 .setExpiration(expiry)
-                .claim("user", user)
-                .claim("lockID", lockID)
+                .claim("userId", user)
+                .claim("lockId", lockID)
                 .claim("keyId", keyId)
                 .signWith(secret)
                 .compact();
@@ -24,14 +25,14 @@ public class JWT {
         return token;
     }
 
-    public static void verifyToken(String token, Long keyId, Long lockId, Long userId) {
+    public static void verifyToken(String token, AtomicLong keyId, AtomicLong lockId, AtomicLong userId) {
         Claims claims = Jwts.parser()
                 .setSigningKey(base64SecretBytes)
                 .parseClaimsJws(token).getBody();
         
-        keyId = claims.get("keyId", Long.class);
-        lockId = claims.get("lockId", Long.class);
-        userId = claims.get("userId", Long.class);
+        keyId.set(Long.parseLong(claims.get("keyId", String.class)));
+        lockId.set(Long.parseLong(claims.get("lockId", String.class)));
+        userId.set(Long.parseLong(claims.get("userId", String.class)));
         
         System.out.println("----------------------------");
         System.out.println("User: " + userId);
