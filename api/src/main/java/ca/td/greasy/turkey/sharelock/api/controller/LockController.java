@@ -64,7 +64,7 @@ public class LockController {
         }
         
         Lock l = lock.get();
-        if (Status.DISABLED.equals(l.getStatus())) {
+        if (Status.DISABLED.equals(l.getStatus()) && Status.LOCKED.equals(request.getStatus())) {
             throw new Exception("Lock is disabled, cannot action it");
         } else {
             l.setStatus(request.getStatus());

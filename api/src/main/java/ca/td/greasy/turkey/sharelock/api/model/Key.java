@@ -33,6 +33,7 @@ public class Key {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date expiryTime;
     private String token;
+    private boolean active = false;
 
     public Long getId() {
         return id;
@@ -80,5 +81,13 @@ public class Key {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

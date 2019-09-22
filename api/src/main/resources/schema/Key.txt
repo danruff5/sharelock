@@ -36,6 +36,9 @@ GET /keys/{userId} => Get Users Keys
 			id: {
 				type: number
 			}, 
+			name: {
+				type: string
+			},
 			expiryTime: {
 				type: number
 			},
