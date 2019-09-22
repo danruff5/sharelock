@@ -98,11 +98,17 @@ GET /locks/{lockId}/keys => Get the keys on the lock
 			id: {
 				type: string
 			},
+			name: {
+				type: string
+			},
 			expiryTime: {
 				type: long
 			},
 			token: {
 				type: string
+			},
+			active: {
+				type: bool
 			}
 		}
 	}

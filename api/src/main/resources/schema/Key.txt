@@ -26,6 +26,9 @@ POST /keys => Create a key
 		},
 		token: {
 			type: string
+		},
+		active: {
+			type: bool
 		}
 	}
 GET /keys/{userId} => Get Users Keys
@@ -44,6 +47,38 @@ GET /keys/{userId} => Get Users Keys
 			},
 			token: {
 				type: string
+			},
+			active: {
+				type: bool
 			}
 		}
 	}
+PUT /keys/{keyId} => Update Key
+	{
+		name: {
+			type: string
+		},
+		newExpiry: {
+			type: number
+		}
+	}
+	
+	{
+		id: {
+			type: number
+		}, 
+		name: {
+			type: string
+		},
+		expiryTime: {
+			type: number
+		},
+		token: {
+			type: string
+		},
+		active: {
+			type: bool
+		}
+	}
+GET /keys/{keyId}/revoke => Revoke Key
+	
