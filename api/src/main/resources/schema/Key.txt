@@ -18,6 +18,19 @@ POST /keys => Create a key
 		id: {
 			type: number
 		}, 
+		lock: {
+			type: Lock
+			{
+				id: {
+					type: string
+				},
+				status: {
+					type: string,
+					enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+				}
+				...
+			}
+		},
 		name: {
 			type: string
 		},
@@ -39,6 +52,19 @@ GET /keys/{userId} => Get Users Keys
 			id: {
 				type: number
 			}, 
+			lock: {
+				type: Lock
+				{
+					id: {
+						type: string
+					},
+					status: {
+						type: string,
+						enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+					}
+					...
+				}
+			},
 			name: {
 				type: string
 			},
@@ -67,6 +93,19 @@ PUT /keys/{keyId} => Update Key
 		id: {
 			type: number
 		}, 
+		lock: {
+			type: Lock
+			{
+				id: {
+					type: string
+				},
+				status: {
+					type: string,
+					enum: [LOCKED, UNLOCKED, DISABLED, OTHER]
+				}
+				...
+			}
+		},
 		name: {
 			type: string
 		},
