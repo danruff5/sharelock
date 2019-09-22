@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 @Entity
-@JsonIgnoreProperties({"user", "lock"})
+@JsonIgnoreProperties({"user"})
 public class Key {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +25,7 @@ public class Key {
     @JoinColumn(name = "userId")
     private User user;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "lockId")
     private Lock lock;
     
