@@ -102,6 +102,7 @@ public class LockController {
             lockRepository.save(l);
             
             key.get().setLastUsedTime(new Date());
+            keyRepository.save(key.get());
         }
         
         return l;
