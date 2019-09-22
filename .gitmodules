@@ -1,0 +1,3 @@
+[submodule "webapp/sharelock"]
+	path = webapp/sharelock
+	url = https://github.com/chriskcampbell/sharelock
