@@ -1,0 +1,3 @@
+[submodule "mobile-app/share-lock"]
+	path = mobile-app/share-lock
+	url = https://github.com/classn/share-lock
