@@ -66,6 +66,11 @@ public class LockController {
         return lockRepository.findByUserId(userId);
     }
     
+    @GetMapping("locks/{lockId}")
+    public Optional<Lock> getLock(@PathVariable("lockId") Long lockId) {
+        return lockRepository.findById(lockId);
+    }
+    
     
     @PostMapping("locks/{lockId}")
     public Lock actionLock(@RequestBody LockActionRequest request, @PathVariable("lockId") Long lockId) throws Exception {
