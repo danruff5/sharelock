@@ -1,6 +1,7 @@
 package ca.td.greasy.turkey.sharelock.api.controller;
 
 import ca.td.greasy.turkey.sharelock.api.JWT;
+import ca.td.greasy.turkey.sharelock.api.model.CreateKeyRequest;
 import ca.td.greasy.turkey.sharelock.api.model.Key;
 import ca.td.greasy.turkey.sharelock.api.model.Lock;
 import ca.td.greasy.turkey.sharelock.api.model.LockActionRequest;
@@ -9,6 +10,7 @@ import ca.td.greasy.turkey.sharelock.api.model.User;
 import ca.td.greasy.turkey.sharelock.api.repository.KeyRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.LockRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.UserRepository;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,9 @@ public class LockController {
     @Autowired
     private KeyRepository keyRepository;
     
+    @Autowired
+    private KeyController keyController;
+    
     @PostMapping("users/{userId}/locks")
     public Lock addLock(@RequestBody Lock lock, @PathVariable("userId") Long userId) throws Exception {
         Optional<User> user = userRepository.findById(userId);
@@ -40,8 +45,19 @@ public class LockController {
             throw new Exception("User does not exist.");
         }
         
-        lock.setUser(user.get());
+        lock.setOwner(user.get());
         lockRepository.save(lock);
+        
+        CreateKeyRequest request = new CreateKeyRequest();
+        request.setName("Owner " + userId + " Key");
+        request.setUserId(userId);
+        request.setLockId(lock.getId());
+        Calendar futureCal = Calendar.getInstance();
+        futureCal.set(Calendar.YEAR, 2024);
+        request.setExpiryTime(futureCal.getTimeInMillis());
+        
+        keyController.createKey(request);
+        
         return lock;
     }
     

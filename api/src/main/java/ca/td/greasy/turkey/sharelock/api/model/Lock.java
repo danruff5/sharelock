@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 @Entity
-@JsonIgnoreProperties({"user"})
+//@JsonIgnoreProperties({"user"})
 public class Lock {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +21,7 @@ public class Lock {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private User user;
+    private User owner;
     private String name;
     private String location;
     private String deviceId;
@@ -39,12 +39,12 @@ public class Lock {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public String getLocation() {
