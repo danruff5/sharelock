@@ -57,7 +57,8 @@ public class KeyController {
         String token = JWT.generateToken(
                 key.getExpiryTime(), 
                 request.getUserId().toString(), 
-                request.getLockId().toString()
+                request.getLockId().toString(),
+                key.getId().toString()
         );
         key.setToken(token);
         key.setActive(true);
@@ -72,15 +73,16 @@ public class KeyController {
         if (!user.isPresent()) {
             throw new Exception("User does not exist"); 
         }
-        
+        Long tokenKey = 0L, tokenLock = 0L, tokenUser = 0L;
         List<Key> keys = keyRepository.getKeysByUserId(userId);
         for (int i = 0; i < keys.size(); i++) {
             try {
-                JWT.verifyToken(keys.get(i).getToken());
+                JWT.verifyToken(keys.get(i).getToken(), tokenKey, tokenLock, tokenUser);
                 keys.get(i).setActive(true);
             } catch (ExpiredJwtException ex) {
                 keys.get(i).setActive(false);
             }
+            keyRepository.save(keys.get(i));
         }
         
         return keys;
@@ -101,7 +103,8 @@ public class KeyController {
         String token = JWT.generateToken(
                 k.getExpiryTime(), 
                 k.getUser().getId().toString(),
-                k.getLock().getId().toString()
+                k.getLock().getId().toString(),
+                k.getId().toString()
         );
         k.setToken(token);
         k.setActive(true);

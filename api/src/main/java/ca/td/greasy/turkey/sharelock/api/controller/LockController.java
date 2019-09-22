@@ -10,9 +10,11 @@ import ca.td.greasy.turkey.sharelock.api.model.User;
 import ca.td.greasy.turkey.sharelock.api.repository.KeyRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.LockRepository;
 import ca.td.greasy.turkey.sharelock.api.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -74,8 +76,9 @@ public class LockController {
     
     @PostMapping("locks/{lockId}")
     public Lock actionLock(@RequestBody LockActionRequest request, @PathVariable("lockId") Long lockId) throws Exception {
-        long tokenLock = JWT.verifyToken(request.getToken());
-        if (tokenLock != lockId) {
+        Long tokenKey = 0L, tokenLock = 0L, tokenUser = 0L;
+        JWT.verifyToken(request.getToken(), tokenKey, tokenLock, tokenUser);
+        if (!Objects.equals(tokenLock, lockId)) {
             throw new Exception("Invalid token");
         }
         
@@ -88,9 +91,16 @@ public class LockController {
         if (Status.DISABLED.equals(l.getStatus()) && !Status.LOCKED.equals(request.getStatus())) {
             throw new Exception("Lock is disabled, cannot action it");
         } else {
+            Optional<Key> key = keyRepository.findById(tokenKey);
+            if (!key.isPresent()) {
+                throw new Exception("Key does not exist");
+            }
+            
             l.setStatus(request.getStatus());
             l.setLastAcessed(new Date());
             lockRepository.save(l);
+            
+            key.get().setLastUsedTime(new Date());
         }
         
         return l;
@@ -103,6 +113,17 @@ public class LockController {
             throw new Exception("Lock does not exist.");
         }
         
-        return keyRepository.getKeysByLockId(lockId);
+        List<Key> keys = keyRepository.getKeysByLockId(lockId);
+        /*Long tokenKey = 0L, tokenLock = 0L, tokenUser = 0L;
+        for (int i = 0; i < keys.size(); i++) {
+            try {
+                JWT.verifyToken(keys.get(i).getToken(), tokenKey, tokenLock, tokenUser);
+                keys.get(i).setActive(true);
+            } catch (ExpiredJwtException ex) {
+                keys.get(i).setActive(false);
+            }
+        }*/
+        
+        return keys;
     }
 }
