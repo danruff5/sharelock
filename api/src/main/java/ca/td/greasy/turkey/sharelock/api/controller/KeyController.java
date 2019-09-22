@@ -50,6 +50,7 @@ public class KeyController {
         if (!lock.isPresent()) {
             throw new Exception("Lock does not exist");
         }
+        key.setOwnerName(lock.get().getOwner().getFirstName());
         key.setLock(lock.get());
         
         key.setExpiryTime(new Date(request.getExpiryTime()));

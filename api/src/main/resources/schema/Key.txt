@@ -42,6 +42,9 @@ POST /keys => Create a key
 		},
 		active: {
 			type: bool
+		},
+		ownerName: {
+			type: string
 		}
 	}
 GET /keys/{userId} => Get Users Keys
@@ -76,6 +79,9 @@ GET /keys/{userId} => Get Users Keys
 			},
 			active: {
 				type: bool
+			},
+			ownerName: {
+				type: string
 			}
 		}
 	}
@@ -117,6 +123,9 @@ PUT /keys/{keyId} => Update Key
 		},
 		active: {
 			type: bool
+		},
+		ownerName: {
+			type: string
 		}
 	}
 GET /keys/{keyId}/revoke => Revoke Key

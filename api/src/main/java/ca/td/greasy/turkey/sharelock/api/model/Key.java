@@ -34,6 +34,7 @@ public class Key {
     private Date expiryTime;
     private String token;
     private boolean active = false;
+    private String ownerName;
 
     public Long getId() {
         return id;
@@ -89,5 +90,13 @@ public class Key {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }
