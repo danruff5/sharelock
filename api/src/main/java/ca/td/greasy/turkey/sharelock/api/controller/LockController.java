@@ -52,7 +52,7 @@ public class LockController {
         lockRepository.save(lock);
         
         CreateKeyRequest request = new CreateKeyRequest();
-        request.setName("Owner " + userId + " Key");
+        request.setName(lock.getName() + " Owner Key");
         request.setUserId(userId);
         request.setLockId(lock.getId());
         Calendar futureCal = Calendar.getInstance();
