@@ -1,3 +1,6 @@
 [submodule "webapp/sharelock"]
 	path = webapp/sharelock
 	url = https://github.com/chriskcampbell/sharelock
+[submodule "mobile-app/share-lock"]
+	path = mobile-app/share-lock
+	url = https://github.com/classn/share-lock
